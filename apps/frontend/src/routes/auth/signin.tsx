@@ -1,11 +1,17 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { AuthForm } from '@/components/auth-form'
-import { requireGuest } from '@/middleware/auth'
+import { FullPageLoader } from '@/components/ui/loader'
+import { authClient } from '@/lib/auth-client'
 
 export const Route = createFileRoute('/auth/signin')({
   component: SignInPage,
-  beforeLoad: async () => {
-    await requireGuest()
+  pendingComponent: FullPageLoader,
+  loader: async () => {
+    const session = await authClient.getSession()
+    if (session.data?.user) {
+      throw redirect({ to: '/dashboard' })
+    }
+    return { session }
   },
 })
 

@@ -26,7 +26,7 @@ interface AuthFormProps {
 }
 
 export function AuthForm({ isSignUp = false }: AuthFormProps) {
-  const [isLogin, setIsLogin] = useState(!isSignUp)
+  const isLogin = !isSignUp
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
@@ -45,14 +45,14 @@ export function AuthForm({ isSignUp = false }: AuthFormProps) {
         if (result.error) {
           setError(result.error.message || 'Failed to sign in')
         } else {
-          navigate({ to: '/' })
+          navigate({ to: '/dashboard' })
         }
       } else {
         const result = await signUp.email({ email, password, name })
         if (result.error) {
           setError(result.error.message || 'Failed to sign up')
         } else {
-          navigate({ to: '/' })
+          navigate({ to: '/auth/signin' })
         }
       }
     } catch (err) {
@@ -168,7 +168,6 @@ export function AuthForm({ isSignUp = false }: AuthFormProps) {
             {loading ? 'Loading...' : isLogin ? 'Sign In' : 'Sign Up'}
           </Button>
 
-          {/* Divider */}
           <div className="relative w-full my-2">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
@@ -214,8 +213,11 @@ export function AuthForm({ isSignUp = false }: AuthFormProps) {
               variant="link"
               className="text-sm text-muted-foreground hover:text-primary"
               onClick={() => {
-                setIsLogin(!isLogin)
-                setError('')
+                if (isLogin) {
+                  navigate({ to: '/auth/signup' })
+                } else {
+                  navigate({ to: '/auth/signin' })
+                }
               }}
             >
               {isLogin

@@ -29,19 +29,3 @@ export async function requireAuth() {
     })
   }
 }
-
-export async function requireGuest() {
-  try {
-    const session = await authClient.getSession()
-
-    if (session.data?.user) {
-      throw redirect({ to: '/dashboard' })
-    }
-  } catch (error) {
-    if (error && typeof error === 'object' && 'isRedirect' in error) {
-      throw error
-    }
-
-    console.error('Session check failed:', error)
-  }
-}

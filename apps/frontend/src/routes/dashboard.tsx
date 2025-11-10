@@ -9,9 +9,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { requireAuth } from '@/middleware/auth'
+import { FullPageLoader } from '@/components/ui/loader'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
+  pendingComponent: FullPageLoader,
   loader: async () => {
     return await requireAuth()
   },
