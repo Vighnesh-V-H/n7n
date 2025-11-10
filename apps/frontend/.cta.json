@@ -1,15 +1,19 @@
 {
-  "projectName": ".",
+  "projectName": "frontend",
   "mode": "file-router",
   "typescript": true,
   "tailwind": true,
   "packageManager": "bun",
-  "git": true,
   "addOnOptions": {},
+  "git": true,
   "version": 1,
   "framework": "react-cra",
   "chosenAddOns": [
+    "eslint",
     "start",
-    "nitro"
+    "compiler",
+    "shadcn",
+    "tRPC",
+    "tanstack-query"
   ]
 }

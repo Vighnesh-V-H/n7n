@@ -1,12 +1,26 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import {
+  HeadContent,
+  Scripts,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
 
-import Header from '../components/Header'
+import Header from '../components/header'
 
 import appCss from '../styles.css?url'
 
-export const Route = createRootRoute({
+import type { QueryClient } from '@tanstack/react-query'
+
+import type { TRPCRouter } from '@/integrations/trpc/router'
+import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
+import { ThemeProvider } from '@/components/theme-provider'
+
+interface RouterContext {
+  queryClient: QueryClient
+
+  trpc: TRPCOptionsProxy<TRPCRouter>
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {
@@ -17,7 +31,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'N7N',
       },
     ],
     links: [
@@ -37,22 +51,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <Header />
-        {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
+      <ThemeProvider defaultTheme="dark">
+        <body>
+          <Header />
+          {children}
+          <Scripts />
+        </body>
+      </ThemeProvider>
     </html>
   )
 }

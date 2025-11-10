@@ -1,177 +1,179 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
+import { NAVBAR_LINKS } from './constants'
 
-import { useState } from 'react'
-import {
-  ChevronDown,
-  ChevronRight,
-  Home,
-  Menu,
-  Network,
-  SquareFunction,
-  StickyNote,
-  X,
-} from 'lucide-react'
+interface NavbarProps {
+  isLoggedIn?: boolean
+}
 
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [groupedExpanded, setGroupedExpanded] = useState<
-    Record<string, boolean>
-  >({})
+export default function Navbar({ isLoggedIn = false }: NavbarProps) {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-          aria-label="Open menu"
-        >
-          <Menu size={24} />
-        </button>
-        <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
-          </Link>
-        </h1>
-      </header>
-
-      <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+    <nav
+      className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? 'top-2' : 'top-0'
+      }`}
+    >
+      <div
+        className={`mx-auto transition-all duration-300 ${
+          isScrolled
+            ? 'max-w-6xl px-4 sm:px-6 lg:px-8 bg-card/70 backdrop-blur-xl border border-border rounded-2xl shadow-lg'
+            : 'max-w-7xl px-4 sm:px-6 lg:px-8 bg-transparent'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
-            aria-label="Close menu"
-          >
-            <X size={24} />
-          </button>
-        </div>
-
-        <nav className="flex-1 p-4 overflow-y-auto">
+        <div
+          className={`flex justify-between items-center transition-all duration-300 ${
+            isScrolled ? 'h-14' : 'h-16'
+          }`}
+        >
           <Link
             to="/"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
+            className="flex items-center space-x-2 hover:scale-105 active:scale-95 transition-transform duration-150"
           >
-            <Home size={20} />
-            <span className="font-medium">Home</span>
-          </Link>
-
-          {/* Demo Links Start */}
-
-          <Link
-            to="/demo/start/server-funcs"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <SquareFunction size={20} />
-            <span className="font-medium">Start - Server Functions</span>
-          </Link>
-
-          <Link
-            to="/demo/start/api-request"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <Network size={20} />
-            <span className="font-medium">Start - API Request</span>
-          </Link>
-
-          <div className="flex flex-row justify-between">
-            <Link
-              to="/demo/start/ssr"
-              onClick={() => setIsOpen(false)}
-              className="flex-1 flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-              activeProps={{
-                className:
-                  'flex-1 flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-              }}
+            <svg
+              className="w-8 h-8 text-foreground"
+              viewBox="0 0 40 40"
+              fill="none"
             >
-              <StickyNote size={20} />
-              <span className="font-medium">Start - SSR Demos</span>
-            </Link>
-            <button
-              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
-              onClick={() =>
-                setGroupedExpanded((prev) => ({
-                  ...prev,
-                  StartSSRDemo: !prev.StartSSRDemo,
-                }))
-              }
-            >
-              {groupedExpanded.StartSSRDemo ? (
-                <ChevronDown size={20} />
-              ) : (
-                <ChevronRight size={20} />
-              )}
-            </button>
+              <path
+                d="M20 5L35 15V25L20 35L5 25V15L20 5Z"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+              />
+              <circle cx="20" cy="20" r="5" fill="currentColor" />
+            </svg>
+            <span className="text-xl font-bold text-foreground">Compass</span>
+          </Link>
+
+          <div className="hidden md:flex items-center space-x-8">
+            {NAVBAR_LINKS.map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className="text-muted-foreground hover:text-foreground transition-colors relative group"
+              >
+                {link.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-300 group-hover:w-full" />
+              </Link>
+            ))}
           </div>
-          {groupedExpanded.StartSSRDemo && (
-            <div className="flex flex-col ml-4">
-              <Link
-                to="/demo/start/ssr/spa-mode"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-                activeProps={{
-                  className:
-                    'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-                }}
-              >
-                <StickyNote size={20} />
-                <span className="font-medium">SPA Mode</span>
-              </Link>
 
+          <div className="hidden md:flex items-center space-x-4">
+            {isLoggedIn ? (
               <Link
-                to="/demo/start/ssr/full-ssr"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-                activeProps={{
-                  className:
-                    'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-                }}
+                to="/dashboard"
+                className="px-6 py-2 rounded-full font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all transform hover:scale-105 active:scale-95"
               >
-                <StickyNote size={20} />
-                <span className="font-medium">Full SSR</span>
+                Dashboard
               </Link>
+            ) : (
+              <>
+                <Link
+                  to="/auth/signin"
+                  className="text-muted-foreground hover:text-foreground transition-transform transform hover:scale-105 active:scale-95"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/auth/signup"
+                  className="px-6 py-2 rounded-full font-medium text-primary-foreground bg-primary hover:bg-primary/90 transition-transform transform hover:scale-105 active:scale-95"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
 
+          <button
+            className="md:hidden text-foreground focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <svg
+              className="w-6 h-6 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ${
+          isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        } bg-card border-t border-border`}
+      >
+        <div className="px-4 py-4 space-y-4">
+          {NAVBAR_LINKS.map((link) => (
+            <Link
+              key={link.name}
+              to={link.href}
+              className="block text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          <div className="pt-4 space-y-2">
+            {isLoggedIn ? (
               <Link
-                to="/demo/start/ssr/data-only"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-                activeProps={{
-                  className:
-                    'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-                }}
+                to="/dashboard"
+                className="block px-6 py-2 bg-primary text-primary-foreground rounded-full text-center font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
-                <StickyNote size={20} />
-                <span className="font-medium">Data Only</span>
+                Dashboard
               </Link>
-            </div>
-          )}
-
-          {/* Demo Links End */}
-        </nav>
-      </aside>
-    </>
+            ) : (
+              <>
+                <Link
+                  to="/auth/signin"
+                  className="block px-6 py-2 text-center text-muted-foreground hover:text-foreground"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/auth/signup"
+                  className="block px-6 py-2 text-primary-foreground bg-primary rounded-full text-center font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
   )
 }

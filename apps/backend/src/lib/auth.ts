@@ -3,7 +3,6 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 import * as schema from "@/db/schema";
 import { SESSION_EXPIRY_TIME, SESSION_UPDATE_AGE } from "./constants";
-import { nextCookies } from "better-auth/next-js";
 import { db } from "@/db";
 import { bearer } from "better-auth/plugins";
 
@@ -22,8 +21,8 @@ export const auth = betterAuth({
   socialProviders: {
     google: {
       prompt: "select_account consent",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
 
@@ -41,5 +40,5 @@ export const auth = betterAuth({
     expiresIn: SESSION_EXPIRY_TIME,
     updateAge: SESSION_UPDATE_AGE,
   },
-  plugins: [nextCookies(), bearer()],
+  plugins: [bearer()],
 });
