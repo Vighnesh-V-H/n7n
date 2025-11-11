@@ -26,3 +26,13 @@ export async function requireAuth() {
     })
   }
 }
+
+export async function getUserSession() {
+  try {
+    const session = await authClient.getSession()
+    return session.data
+  } catch (error) {
+    console.error('Failed to get user session:', error)
+    return null
+  }
+}
