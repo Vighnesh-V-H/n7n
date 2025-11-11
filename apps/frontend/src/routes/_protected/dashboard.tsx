@@ -11,7 +11,7 @@ import {
 import { requireAuth } from '@/middleware/auth'
 import { FullPageLoader } from '@/components/ui/loader'
 
-export const Route = createFileRoute('/dashboard')({
+export const Route = createFileRoute('/_protected/dashboard')({
   component: DashboardPage,
   pendingComponent: FullPageLoader,
   loader: async () => {

@@ -7,10 +7,7 @@ export async function requireAuth() {
 
     if (!session.data?.user) {
       throw redirect({
-        to: '/auth/signin',
-        search: {
-          redirect: window.location.pathname,
-        },
+        to: '/auth/signin'
       })
     }
 

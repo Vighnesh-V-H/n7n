@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { AuthForm } from '@/components/auth-form'
 import { FullPageLoader } from '@/components/ui/loader'
 
@@ -17,8 +18,18 @@ export const Route = createFileRoute('/auth/signup')({
 })
 
 function SignUpPage() {
-  const { session } = Route.useLoaderData()
-  console.log(session)
+const navigate = useNavigate()
+  const { data: session, isPending } = authClient.useSession()
+
+  useEffect(() => {
+    if ( session?.user) {
+      navigate({ to: '/dashboard' })
+    }
+  }, [ session, navigate])
+
+  if (isPending) {
+    return <FullPageLoader />
+  }
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <AuthForm isSignUp={true} />

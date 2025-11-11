@@ -48,14 +48,19 @@ export default function Navbar({ isLoggedIn = false }: NavbarProps) {
               fill="none"
             >
               <path
-                d="M20 5L35 15V25L20 35L5 25V15L20 5Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                fill="none"
+                d="M10 10h8v20h-8z"
+                fill="currentColor"
               />
-              <circle cx="20" cy="20" r="5" fill="currentColor" />
+              <path
+                d="M22 10h8v8h-8z"
+                fill="currentColor"
+              />
+              <path
+                d="M22 22l8 8h-8v-8z"
+                fill="currentColor"
+              />
             </svg>
-            <span className="text-xl font-bold text-foreground">Compass</span>
+            <span className="text-xl font-bold text-foreground">N7N</span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">

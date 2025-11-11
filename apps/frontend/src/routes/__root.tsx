@@ -2,6 +2,7 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
+  useRouterState,
 } from '@tanstack/react-router'
 
 import Header from '../components/header'
@@ -46,6 +47,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const routerState = useRouterState()
+  const isAuthRoute = routerState.location.pathname.startsWith('/auth')
+
   return (
     <html lang="en">
       <head>
@@ -53,7 +57,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <ThemeProvider defaultTheme="dark">
         <body>
-          <Header />
+          {isAuthRoute && <Header />}
           {children}
           <Scripts />
         </body>
