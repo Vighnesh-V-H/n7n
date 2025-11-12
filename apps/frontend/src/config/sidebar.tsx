@@ -30,12 +30,12 @@ export const sidebarConfig: Array<SidebarSection> = [
       },
       {
         title: 'Analytics',
-        url: '/dashboard',
+        url: '/analytics',
         icon: BarChart3,
       },
       {
         title: 'Projects',
-        url: '/dashboard',
+        url: '/projects',
         icon: FolderKanban,
         badge: '3',
       },
@@ -46,7 +46,7 @@ export const sidebarConfig: Array<SidebarSection> = [
     items: [
       {
         title: 'Settings',
-        url: '/dashboard',
+        url: '/settings',
         icon: Settings,
       },
     ],

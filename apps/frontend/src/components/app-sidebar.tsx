@@ -1,5 +1,3 @@
-'use client'
-
 import { ChevronLeft } from 'lucide-react'
 import { SidebarOptions } from './sidebar-options'
 import { NavUser } from './nav-user'
@@ -31,7 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       onClick={handleSidebarClick}
       className={cn(
         !open ? 'cursor-e-resize' : '',
-        'w-full max-w-xs md:max-w-[18rem] rounded-2xl m-1 overflow-hidden',
+        'w-full max-w-xs md:max-w-[18rem] rounded-2xl m-1 overflow-hidden transition-all duration-300 ease-in-out',
         'bg-black text-white border border-white/6 shadow-[0_10px_30px_rgba(0,0,0,.6)]',
       )}
       {...props}
@@ -54,7 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
               </svg>
             </div>
-            <span className="font-semibold text-lg group-data-[collapsible=icon]:hidden text-white">
+            <span className="font-semibold text-lg group-data-[collapsible=icon]:hidden text-white transition-opacity duration-200 ease-in-out">
               N7N
             </span>
           </div>
@@ -63,7 +61,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             size="icon"
             onClick={toggleSidebar}
             className={cn(
-              'h-8 w-8 rounded-lg transition-transform duration-200 hover:bg-white/6',
+              'h-8 w-8 rounded-lg transition-all duration-200 ease-in-out hover:bg-white/6',
               open ? '' : 'rotate-180',
             )}
           >
