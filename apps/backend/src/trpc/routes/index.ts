@@ -5,7 +5,6 @@ import { subscriptionRouter } from "./subscription";
 
 export const appRouter = router({
   health: healthRouter,
-  auth: authRouter,
   subscription: subscriptionRouter,
 });
 

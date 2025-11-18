@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, Crown } from 'lucide-react'
 import { SidebarOptions } from './sidebar-options'
 import { NavUser } from './nav-user'
@@ -12,15 +11,12 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { useTRPC } from '@/integrations/trpc/react'
 import { checkout } from '@/lib/auth-client'
+import { useHasActiveSubscription } from '@/hooks/use-subscription'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar, setOpen, open } = useSidebar()
-  const trpc = useTRPC()
-  const { data: planData } = useQuery(
-    trpc.subscription.checkPlan.queryOptions(),
-  )
+  const { hasActiveSubscription } = useHasActiveSubscription()
 
   function handleSidebarClick(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
@@ -30,7 +26,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const handleUpgrade = async () => {
-    await checkout()
+    await checkout({ slug: 'N7N-Pro' })
   }
 
   return (
@@ -87,10 +83,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter className="mt-auto px-3 py-3 space-y-3">
-        {planData?.isFree && (
+        {!hasActiveSubscription && (
           <Button
             onClick={handleUpgrade}
-            className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white group-data-[collapsible=icon]:hidden transition-all duration-200"
+            className="w-full bg-white/10 hover:bg-white/20 text-white group-data-[collapsible=icon]:hidden transition-all duration-200"
           >
             <Crown className="mr-2 h-4 w-4" />
             Upgrade to Pro

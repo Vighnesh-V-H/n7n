@@ -22,6 +22,20 @@
       "when": 1763483986197,
       "tag": "0002_slimy_korath",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1763491795821,
+      "tag": "0003_cultured_layla_miller",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763493352654,
+      "tag": "0004_mysterious_dragon_man",
+      "breakpoints": true
     }
   ]
 }

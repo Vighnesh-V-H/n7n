@@ -5,9 +5,9 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,11 +27,13 @@ import {
   signOut,
   useSession,
 } from '@/lib/auth-client'
+import { useHasActiveSubscription } from '@/hooks/use-subscription'
 
 export function NavUser() {
   const { data: session } = useSession()
   const router = useRouter()
   const user = session?.user
+  const { hasActiveSubscription } = useHasActiveSubscription()
 
   const handleSignout = async () => {
     await signOut()
@@ -67,9 +69,19 @@ export function NavUser() {
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {user?.name || 'User'}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="truncate font-medium">
+                    {user?.name || 'User'}
+                  </span>
+                  {hasActiveSubscription && (
+                    <Badge
+                      variant="secondary"
+                      className="text-xs px-1.5 py-0.5 h-5"
+                    >
+                      Pro
+                    </Badge>
+                  )}
+                </div>
                 <span className="truncate text-xs text-muted-foreground">
                   {user?.email || ''}
                 </span>
@@ -107,15 +119,6 @@ export function NavUser() {
             </DropdownMenuLabel> */}
 
             <DropdownMenuGroup className="mt-1 space-y-0.5">
-              <DropdownMenuItem
-                className="text-[13px] py-1.5"
-                onClick={() => {
-                  checkout({ slug: 'N7N-Pro' })
-                }}
-              >
-                <Sparkles className="mr-2 h-3.5 w-3.5" />
-                Upgrade to Pro
-              </DropdownMenuItem>
               <DropdownMenuItem className="text-[13px] py-1.5">
                 <BadgeCheck className="mr-2 h-3.5 w-3.5" />
                 Account

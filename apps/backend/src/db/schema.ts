@@ -9,8 +9,6 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const planEnum = pgEnum("plan", ["free", "pro"]);
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -71,36 +69,4 @@ export const verification = pgTable("verification", {
   ),
 });
 
-export const subscription = pgTable("subscription", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" })
-    .unique(),
-  plan: planEnum("plan")
-    .$defaultFn(() => "free")
-    .notNull(),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-});
 
-export const workflowLimits = pgTable("workflow_limits", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" })
-    .unique(),
-  maxWorkflows: integer("max_workflows").notNull(),
-  maxWorkflowRuns: integer("max_workflow_runs").notNull(),
-  maxNodesPerWorkflow: integer("max_nodes_per_workflow").notNull(),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-});

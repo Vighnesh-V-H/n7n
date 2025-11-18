@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import type { User, Session } from "better-auth";
 import { logger } from "@/lib/logger";
 import superjson from "superjson";
+import { polarClient } from "@/lib/polar";
 
 export interface Context extends Record<string, unknown> {
   user: User | null;
@@ -53,4 +54,46 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
       session: ctx.session,
     },
   });
+});
+
+export const premiumProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.user || !ctx.session) {
+    logger.warn("Unauthorized access attempt");
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to access this resource",
+    });
+  }
+
+  try {
+    const customer = await polarClient.customers.getStateExternal({
+      externalId: ctx.user.id,
+    });
+
+    if (
+      !customer.activeSubscriptions ||
+      customer.activeSubscriptions.length === 0
+    ) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "This feature requires a premium subscription",
+      });
+    }
+
+    return next({
+      ctx: {
+        user: ctx.user,
+        session: ctx.session,
+      },
+    });
+  } catch (error) {
+    if (error instanceof TRPCError) {
+      throw error;
+    }
+    logger.error("Failed to check subscription status", error);
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Failed to verify subscription status",
+    });
+  }
 });
