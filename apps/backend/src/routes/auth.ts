@@ -4,7 +4,6 @@ import { auth } from "@/lib/auth";
 import { TRPCError } from "@trpc/server";
 
 export const authRouter = router({
-  // Get current session/user
   getSession: publicProcedure.query(async ({ ctx }) => {
     return {
       user: ctx.user,
@@ -12,7 +11,6 @@ export const authRouter = router({
     };
   }),
 
-  // Get current user (protected)
   me: protectedProcedure.query(({ ctx }) => {
     return ctx.user;
   }),

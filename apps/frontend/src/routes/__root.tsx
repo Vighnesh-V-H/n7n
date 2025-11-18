@@ -5,20 +5,20 @@ import {
   useRouterState,
 } from '@tanstack/react-router'
 
-import Header from '../components/header'
+import Header from '../components/header-landing'
 
 import appCss from '../styles.css?url'
 
+import type { AppRouter } from '@n7n/backend/routes'
 import type { QueryClient } from '@tanstack/react-query'
 
-import type { TRPCRouter } from '@/integrations/trpc/router'
 import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { ThemeProvider } from '@/components/theme-provider'
 
 interface RouterContext {
   queryClient: QueryClient
 
-  trpc: TRPCOptionsProxy<TRPCRouter>
+  trpc: TRPCOptionsProxy<AppRouter>
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({

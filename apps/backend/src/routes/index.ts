@@ -1,8 +1,9 @@
 import { router } from "@/lib/trpc";
-import { healthRouter } from "./health";
+import { createTRPCRouter, healthRouter } from "./health";
 import { authRouter } from "./auth";
+import { initTRPC } from "@trpc/server";
 
-export const appRouter = router({
+export const appRouter = createTRPCRouter({
   health: healthRouter,
   auth: authRouter,
 });

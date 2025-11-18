@@ -41,6 +41,14 @@ app.use(
   })
 );
 
+app.use(
+  "/trpc/*",
+  trpcServer({
+    router: appRouter,
+  })
+);
+
+
 app.on(["POST", "GET"], "/api/auth/**", (c) => {
   return auth.handler(c.req.raw);
 });

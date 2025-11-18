@@ -29,8 +29,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       onClick={handleSidebarClick}
       className={cn(
         !open ? 'cursor-e-resize' : '',
-        'w-full max-w-xs md:max-w-[18rem] rounded-2xl m-1 overflow-hidden transition-all duration-300 ease-in-out',
-        'bg-black text-white border border-white/6 shadow-[0_10px_30px_rgba(0,0,0,.6)]',
+        'overflow-hidden m-1 rounded-2xl border border-white/6 bg-black text-white',
+        'transition-all duration-300 ease-in-out',
+        'shadow-[0_10px_30px_rgba(0,0,0,.6)]',
       )}
       {...props}
     >

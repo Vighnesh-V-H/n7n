@@ -20,7 +20,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { signOut, useSession } from '@/lib/auth-client'
+import {
+  authClient,
+  checkout,
+  customer,
+  signOut,
+  useSession,
+} from '@/lib/auth-client'
 
 export function NavUser() {
   const { data: session } = useSession()
@@ -101,7 +107,12 @@ export function NavUser() {
             </DropdownMenuLabel> */}
 
             <DropdownMenuGroup className="mt-1 space-y-0.5">
-              <DropdownMenuItem className="text-[13px] py-1.5">
+              <DropdownMenuItem
+                className="text-[13px] py-1.5"
+                onClick={() => {
+                  checkout({ slug: 'N7N-Pro' })
+                }}
+              >
                 <Sparkles className="mr-2 h-3.5 w-3.5" />
                 Upgrade to Pro
               </DropdownMenuItem>
@@ -109,7 +120,12 @@ export function NavUser() {
                 <BadgeCheck className="mr-2 h-3.5 w-3.5" />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-[13px] py-1.5">
+              <DropdownMenuItem
+                className="text-[13px] py-1.5"
+                onClick={() => {
+                  customer.portal()
+                }}
+              >
                 <CreditCard className="mr-2 h-3.5 w-3.5" />
                 Billing
               </DropdownMenuItem>

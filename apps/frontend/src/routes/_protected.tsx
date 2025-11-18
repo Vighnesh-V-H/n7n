@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Outlet, createFileRoute, useRouterState } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
 import { Bell } from 'lucide-react'
 import { requireAuth } from '@/middleware/auth'
 import { FullPageLoader } from '@/components/ui/loader'
@@ -18,6 +19,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { sidebarConfig } from '@/config/sidebar'
+import { useTRPC } from '@/integrations/trpc/react'
 
 const checkauth = createServerFn().handler(async () => {
   await requireAuth()
@@ -32,8 +34,12 @@ export const Route = createFileRoute('/_protected')({
 function ProtectedLayout() {
   const routerState = useRouterState()
   const pathname = routerState.location.pathname || '/'
+  const trpc = useTRPC()
 
-  // Find current route name from sidebar config
+  const healthQuery = useQuery(trpc.health.check.queryOptions())
+
+  console.log(healthQuery.data)
+
   const currentRoute = sidebarConfig
     .flatMap((section) => section.items)
     .find(
@@ -49,7 +55,7 @@ function ProtectedLayout() {
           <AppSidebar />
 
           <SidebarInset className="flex flex-col w-full">
-            <header className="flex h-16 shrink-0 border-b border-border/40 justify-between items-center gap-2 px-4">
+            <header className="flex h-16 bg-[#1e1e1e4e] shrink-0 border-b border-border/40 justify-between items-center gap-2 px-4">
               <div className="flex items-center gap-2 px-4">
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -69,6 +75,26 @@ function ProtectedLayout() {
               </div>
 
               <div className="hidden md:flex items-center gap-3 mr-4">
+                {healthQuery.data && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-muted text-xs">
+                        <span className="h-2 w-2 rounded-full bg-green-500" />
+                        <span className="text-muted-foreground">
+                          {healthQuery.data.status}
+                        </span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        Last checked:{' '}
+                        {new Date(
+                          healthQuery.data.timestamp,
+                        ).toLocaleTimeString()}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -76,7 +102,7 @@ function ProtectedLayout() {
                   aria-label="Notifications"
                 >
                   <Bell className="h-5 w-5" />
-                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
+                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full" />
                 </Button>
               </div>
             </header>
