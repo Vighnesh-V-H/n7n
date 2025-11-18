@@ -1,1 +1,1 @@
-export type { AppRouter as TRPCRouter } from '@n7n/backend/routes'
+export type { AppRouter as TRPCRouter } from '@n7n/backend'

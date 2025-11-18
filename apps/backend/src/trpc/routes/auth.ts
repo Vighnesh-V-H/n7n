@@ -1,7 +1,10 @@
-import { router, publicProcedure, protectedProcedure } from "@/lib/trpc";
+import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { TRPCError } from "@trpc/server";
+import { db } from "@/db";
+import { subscription, workflowLimits } from "@/db/schema";
+import { nanoid } from "nanoid";
 
 export const authRouter = router({
   getSession: publicProcedure.query(async ({ ctx }) => {
@@ -33,6 +36,24 @@ export const authRouter = router({
             name: input.name,
           },
         });
+
+        if (result && result.user) {
+          const userId = result.user.id;
+
+          await db.insert(subscription).values({
+            id: nanoid(),
+            userId: userId,
+            plan: "free",
+          });
+
+          await db.insert(workflowLimits).values({
+            id: nanoid(),
+            userId: userId,
+            maxWorkflows: 3,
+            maxWorkflowRuns: 50,
+            maxNodesPerWorkflow: 10,
+          });
+        }
 
         return result;
       } catch (error) {

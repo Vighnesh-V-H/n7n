@@ -1,4 +1,5 @@
-import { ChevronLeft } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { ChevronLeft, Crown } from 'lucide-react'
 import { SidebarOptions } from './sidebar-options'
 import { NavUser } from './nav-user'
 import type * as React from 'react'
@@ -11,15 +12,25 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { useTRPC } from '@/integrations/trpc/react'
+import { checkout } from '@/lib/auth-client'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar, setOpen, open } = useSidebar()
+  const trpc = useTRPC()
+  const { data: planData } = useQuery(
+    trpc.subscription.checkPlan.queryOptions(),
+  )
 
   function handleSidebarClick(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
     if (!open) {
       setOpen(true)
     }
+  }
+
+  const handleUpgrade = async () => {
+    await checkout()
   }
 
   return (
@@ -75,7 +86,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarOptions />
       </SidebarContent>
 
-      <SidebarFooter className="mt-auto px-3 py-3">
+      <SidebarFooter className="mt-auto px-3 py-3 space-y-3">
+        {planData?.isFree && (
+          <Button
+            onClick={handleUpgrade}
+            className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white group-data-[collapsible=icon]:hidden transition-all duration-200"
+          >
+            <Crown className="mr-2 h-4 w-4" />
+            Upgrade to Pro
+          </Button>
+        )}
         <div className="flex items-center gap-3">
           <NavUser />
         </div>

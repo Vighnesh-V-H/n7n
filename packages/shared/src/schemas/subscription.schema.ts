@@ -1,24 +1,33 @@
 import { z } from "zod";
 
-export const subscriptionStatusSchema = z.enum([
-  "active",
-  "canceled",
-  "past_due",
-  "trialing",
-]);
+export const planSchema = z.enum(["free", "pro"]);
 
-export const subscriptionInputSchema = z.object({
-  userId: z.string(),
-});
-
-export const subscriptionOutputSchema = z.object({
+export const subscriptionSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  status: subscriptionStatusSchema,
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  plan: planSchema,
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
-export type SubscriptionStatus = z.infer<typeof subscriptionStatusSchema>;
-export type SubscriptionInput = z.infer<typeof subscriptionInputSchema>;
-export type SubscriptionOutput = z.infer<typeof subscriptionOutputSchema>;
+export const workflowLimitsSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  maxWorkflows: z.number(),
+  maxWorkflowRuns: z.number(),
+  maxNodesPerWorkflow: z.number(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const checkPlanOutputSchema = z.object({
+  plan: planSchema,
+  limits: workflowLimitsSchema,
+  isPro: z.boolean(),
+  isFree: z.boolean(),
+});
+
+export type Plan = z.infer<typeof planSchema>;
+export type Subscription = z.infer<typeof subscriptionSchema>;
+export type WorkflowLimits = z.infer<typeof workflowLimitsSchema>;
+export type CheckPlanOutput = z.infer<typeof checkPlanOutputSchema>;

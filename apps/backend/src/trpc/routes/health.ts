@@ -1,4 +1,3 @@
-import { router } from "@/lib/trpc";
 import superjson from "superjson";
 import { logger } from "@/lib/logger";
 import {
@@ -6,14 +5,8 @@ import {
   type HealthCheckOutput,
   type PingOutput,
 } from "@repo/shared/schemas";
-import { initTRPC, type TRPCRouterRecord } from "@trpc/server";
-
-const t = initTRPC.create({
-  transformer: superjson,
-});
-
-export const createTRPCRouter = t.router;
-export const publicProcedure = t.procedure;
+import { type TRPCRouterRecord } from "@trpc/server";
+import { publicProcedure } from "../trpc";
 
 export const healthRouter = {
   check: publicProcedure.query(() => {
