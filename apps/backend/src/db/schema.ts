@@ -1,3 +1,4 @@
+import { create } from "domain";
 import {
   boolean,
   integer,
@@ -69,4 +70,18 @@ export const verification = pgTable("verification", {
   ),
 });
 
-
+export const workflow = pgTable("workflow", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: varchar("name", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+});

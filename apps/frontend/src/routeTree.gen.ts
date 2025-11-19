@@ -13,7 +13,9 @@ import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
+import { Route as ProtectedWorkflowRouteImport } from './routes/_protected/workflow'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as ProtectedWorkflowWorkflowIdRouteImport } from './routes/_protected/workflow.$workflowId'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -34,44 +36,75 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/auth/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedWorkflowRoute = ProtectedWorkflowRouteImport.update({
+  id: '/workflow',
+  path: '/workflow',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedWorkflowWorkflowIdRoute =
+  ProtectedWorkflowWorkflowIdRouteImport.update({
+    id: '/$workflowId',
+    path: '/$workflowId',
+    getParentRoute: () => ProtectedWorkflowRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/workflow': typeof ProtectedWorkflowRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/workflow/$workflowId': typeof ProtectedWorkflowWorkflowIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/workflow': typeof ProtectedWorkflowRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/workflow/$workflowId': typeof ProtectedWorkflowWorkflowIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/workflow': typeof ProtectedWorkflowRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/_protected/workflow/$workflowId': typeof ProtectedWorkflowWorkflowIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/auth/signin' | '/auth/signup'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/workflow'
+    | '/auth/signin'
+    | '/auth/signup'
+    | '/workflow/$workflowId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/auth/signin' | '/auth/signup'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/workflow'
+    | '/auth/signin'
+    | '/auth/signup'
+    | '/workflow/$workflowId'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/_protected/dashboard'
+    | '/_protected/workflow'
     | '/auth/signin'
     | '/auth/signup'
+    | '/_protected/workflow/$workflowId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/workflow': {
+      id: '/_protected/workflow'
+      path: '/workflow'
+      fullPath: '/workflow'
+      preLoaderRoute: typeof ProtectedWorkflowRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_protected/dashboard': {
       id: '/_protected/dashboard'
       path: '/dashboard'
@@ -118,15 +158,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/workflow/$workflowId': {
+      id: '/_protected/workflow/$workflowId'
+      path: '/$workflowId'
+      fullPath: '/workflow/$workflowId'
+      preLoaderRoute: typeof ProtectedWorkflowWorkflowIdRouteImport
+      parentRoute: typeof ProtectedWorkflowRoute
+    }
   }
 }
 
+interface ProtectedWorkflowRouteChildren {
+  ProtectedWorkflowWorkflowIdRoute: typeof ProtectedWorkflowWorkflowIdRoute
+}
+
+const ProtectedWorkflowRouteChildren: ProtectedWorkflowRouteChildren = {
+  ProtectedWorkflowWorkflowIdRoute: ProtectedWorkflowWorkflowIdRoute,
+}
+
+const ProtectedWorkflowRouteWithChildren =
+  ProtectedWorkflowRoute._addFileChildren(ProtectedWorkflowRouteChildren)
+
 interface ProtectedRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedWorkflowRoute: typeof ProtectedWorkflowRouteWithChildren
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedWorkflowRoute: ProtectedWorkflowRouteWithChildren,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

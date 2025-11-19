@@ -4,7 +4,7 @@ import { createTRPCClient, httpBatchStreamLink } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
 
-import type { AppRouter } from '@n7n/backend/routes'
+import type { AppRouter } from '@n7n/backend/trpc'
 import { TRPCProvider } from '@/integrations/trpc/react'
 
 function getUrl() {
@@ -16,6 +16,9 @@ export const trpcClient = createTRPCClient<AppRouter>({
     httpBatchStreamLink({
       transformer: superjson,
       url: getUrl(),
+      fetch(url, opts) {
+        return fetch(url, { ...opts, credentials: 'include' })
+      },
     }),
   ],
 })

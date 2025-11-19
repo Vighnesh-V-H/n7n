@@ -20,13 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import {
-  authClient,
-  checkout,
-  customer,
-  signOut,
-  useSession,
-} from '@/lib/auth-client'
+import { customer, signOut, useSession } from '@/lib/auth-client'
 import { useHasActiveSubscription } from '@/hooks/use-subscription'
 
 export function NavUser() {
@@ -76,7 +70,7 @@ export function NavUser() {
                   {hasActiveSubscription && (
                     <Badge
                       variant="secondary"
-                      className="text-xs px-1.5 py-0.5 h-5"
+                      className="text-xs bg-emerald-600 px-1.5 py-0.5 h-5"
                     >
                       Pro
                     </Badge>
@@ -96,28 +90,6 @@ export function NavUser() {
             align="end"
             sideOffset={4}
           >
-            {/* <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-2 py-1.5 text-left text-[13px]">
-                <Avatar className="h-7 w-7 rounded-lg">
-                  <AvatarImage
-                    src={user?.image || ''}
-                    alt={user?.name || 'User'}
-                  />
-                  <AvatarFallback className="rounded-lg bg-muted">
-                    {getInitials(user?.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left leading-tight">
-                  <span className="truncate font-medium">
-                    {user?.name || 'User'}
-                  </span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    {user?.email || ''}
-                  </span>
-                </div>
-              </div>
-            </DropdownMenuLabel> */}
-
             <DropdownMenuGroup className="mt-1 space-y-0.5">
               <DropdownMenuItem className="text-[13px] py-1.5">
                 <BadgeCheck className="mr-2 h-3.5 w-3.5" />

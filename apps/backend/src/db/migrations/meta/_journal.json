@@ -36,6 +36,13 @@
       "when": 1763493352654,
       "tag": "0004_mysterious_dragon_man",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1763559027509,
+      "tag": "0005_steady_red_skull",
+      "breakpoints": true
     }
   ]
 }

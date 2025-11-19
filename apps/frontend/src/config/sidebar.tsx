@@ -1,10 +1,10 @@
 import {
   BarChart3,
   FolderKanban,
-  LayoutDashboard,
   LogOut,
   Settings,
   User,
+  Workflow,
 } from 'lucide-react'
 
 export interface SidebarItem {
@@ -24,9 +24,9 @@ export const sidebarConfig: Array<SidebarSection> = [
     title: 'Main',
     items: [
       {
-        title: 'Dashboard',
-        url: '/dashboard',
-        icon: LayoutDashboard,
+        title: 'Workflows',
+        url: '/workflow',
+        icon: Workflow,
       },
       {
         title: 'Analytics',
