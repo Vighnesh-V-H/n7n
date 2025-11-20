@@ -8,7 +8,7 @@ const checkAuth = createServerFn().handler(async () => {
   await requireAuth()
 })
 
-export const Route = createFileRoute('/_protected/workflow')({
+export const Route = createFileRoute('/_protected/workflows')({
   component: WorkflowPage,
   pendingComponent: FullPageLoader,
   loader: () => checkAuth,

@@ -1,4 +1,3 @@
-import { create } from "domain";
 import {
   boolean,
   integer,
@@ -9,6 +8,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -73,7 +73,7 @@ export const verification = pgTable("verification", {
 export const workflow = pgTable("workflow", {
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => nanoid()),
   name: varchar("name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())

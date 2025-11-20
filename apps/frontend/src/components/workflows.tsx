@@ -34,6 +34,10 @@ export function Workflows() {
     }
   }
 
+  const handleWorkflowClick = (workflowId: string) => {
+    navigate({ to: `/workflow/${workflowId}` })
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -68,7 +72,8 @@ export function Workflows() {
           workflows.map((workflow: any) => (
             <div
               key={workflow.id}
-              className="rounded-lg border bg-card p-6 hover:bg-accent/50 transition-colors"
+              className="rounded-lg border bg-card p-6 hover:bg-accent/50 transition-colors cursor-pointer"
+              onClick={() => handleWorkflowClick(workflow.id)}
             >
               <h3 className="font-semibold">{workflow.name}</h3>
               <p className="text-sm text-muted-foreground mt-2">

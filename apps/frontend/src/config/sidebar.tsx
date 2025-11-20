@@ -25,7 +25,7 @@ export const sidebarConfig: Array<SidebarSection> = [
     items: [
       {
         title: 'Workflows',
-        url: '/workflow',
+        url: '/workflows',
         icon: Workflow,
       },
       {

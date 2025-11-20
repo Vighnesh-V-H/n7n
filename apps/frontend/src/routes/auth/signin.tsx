@@ -15,7 +15,7 @@ function SignInPage() {
 
   useEffect(() => {
     if (session?.user) {
-      navigate({ to: '/dashboard' })
+      navigate({ to: '/workflows' })
     }
   }, [session, navigate])
 
