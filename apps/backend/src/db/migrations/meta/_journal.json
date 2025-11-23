@@ -43,6 +43,13 @@
       "when": 1763559027509,
       "tag": "0005_steady_red_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1763894217991,
+      "tag": "0006_special_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }

@@ -1,6 +1,8 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   serial,
@@ -75,13 +77,86 @@ export const workflow = pgTable("workflow", {
     .primaryKey()
     .$defaultFn(() => nanoid()),
   name: varchar("name", { length: 255 }).notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
     .notNull(),
   updatedAt: timestamp("updated_at")
     .$defaultFn(() => new Date())
     .notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
 });
+
+export const NODETYPE = pgEnum("nodetype", ["INITIAL"]);
+
+export const workflowRelations = relations(workflow, ({ many }) => ({
+  nodes: many(node),
+  connections: many(connection),
+}));
+
+export const node = pgTable("node", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  workflowId: text("workflow_id")
+    .notNull()
+    .references(() => workflow.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: NODETYPE("type").notNull(),
+  position: jsonb("position").notNull(),
+  data: jsonb("data").notNull().default({}),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+export const nodeRelations = relations(node, ({ one }) => ({
+  workflow: one(workflow, {
+    fields: [node.workflowId],
+    references: [workflow.id],
+  }),
+}));
+
+export const connection = pgTable("connection", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  workflowId: text("workflow_id")
+    .notNull()
+    .references(() => workflow.id, { onDelete: "cascade" }),
+  sourceNodeId: text("source_node_id")
+    .notNull()
+    .references(() => node.id, { onDelete: "cascade" }),
+  targetNodeId: text("target_node_id")
+    .notNull()
+    .references(() => node.id, { onDelete: "cascade" }),
+  fromOutput: text("from_output").notNull().default("main"),
+  toInput: text("to_input").notNull().default("main"),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+export const connectionRelations = relations(connection, ({ one }) => ({
+  workflow: one(workflow, {
+    fields: [connection.workflowId],
+    references: [workflow.id],
+  }),
+  sourceNode: one(node, {
+    fields: [connection.sourceNodeId],
+    references: [node.id],
+    relationName: "sourceConnection",
+  }),
+  targetNode: one(node, {
+    fields: [connection.targetNodeId],
+    references: [node.id],
+    relationName: "targetConnection",
+  }),
+}));
